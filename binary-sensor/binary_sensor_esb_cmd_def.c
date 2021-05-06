@@ -12,7 +12,7 @@
 void binary_sensor_esb_cmd_fct_get_channel(const esb_protocol_message_t* message, esb_protocol_message_t* answer)
 {
     answer->error = ESB_PROT_REPLY_ERR_OK;
-    binary_channel_value_t chan_value;
+    channel_value_t chan_value;
     esb_protocol_err_t result = binary_sensor_get_channel(message->payload[0], &chan_value);
 
     if(result != ESB_PROT_ERR_OK){
@@ -35,7 +35,7 @@ void binary_sensor_esb_cmd_fct_get_channel(const esb_protocol_message_t* message
 void binary_sensor_esb_cmd_fct_set_channel(const esb_protocol_message_t* message, esb_protocol_message_t* answer)
 {
     answer->error = ESB_PROT_REPLY_ERR_OK;
-    esb_protocol_err_t result = binary_sensor_set_channel(message->payload[0], (binary_channel_value_t)message->payload[1]);
+    esb_protocol_err_t result = binary_sensor_set_channel(message->payload[0], (channel_value_t)message->payload[1]);
 
     if(result != ESB_PROT_ERR_OK){
         answer->error = ESB_PROT_REPLY_ERR_PARAM;

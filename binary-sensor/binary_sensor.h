@@ -23,7 +23,7 @@
 
 
 #include <stdint.h>
-#include "esb_protocol.h"
+#include <common/protocol/esb_protocol.h>
 
 #define BINARY_SENSOR_NOTIFICATION_ESB_CMD_ID    0x91
 

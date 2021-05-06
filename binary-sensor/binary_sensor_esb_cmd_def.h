@@ -2,7 +2,7 @@
 #ifndef BINARY_SENSOR_ESB_CMD_DEF_H_
 #define BINARY_SENSOR_ESB_CMD_DEF_H_
 
-#include "esb_commands.h"
+#include <common/commands/esb_commands.h>
 
 enum
 {
