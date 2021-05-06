@@ -1,6 +1,6 @@
 #include <stddef.h>
 
-#include "esb_cmd_def_common.h"
+#include <common/commands/esb_cmd_def_common.h>
 #include "version.h"
 
 

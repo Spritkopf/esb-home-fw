@@ -2,7 +2,7 @@
 #define ESB_PROTOCOL_H_
 
 #include <stdint.h>
-#include "esb.h"
+#include <common/driver/esb.h>
 
 #define ESB_PROTOCOL_HEADER_SIZE        2  /* command and error byte */
 #define ESB_PROTOCOL_MAX_PAYLOAD_LEN    32 - ESB_PROTOCOL_HEADER_SIZE

@@ -1,8 +1,8 @@
 
 #include <string.h>
 #include <stdint.h>
-#include "esb_protocol.h"
-#include "esb_commands.h"
+#include <common/protocol/esb_protocol.h>
+#include <common/commands/esb_commands.h>
 
 #include "nrf_queue.h"
 

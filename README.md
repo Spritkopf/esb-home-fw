@@ -3,6 +3,9 @@ Firmware modules for DIY smart home system 'esb-home'
 
 This repository is meant to be included as submodule in the firmware projects that use the esb-home protocol. 
 
+# usage
+Add this repository as submodule to your firmware project. Add the submodule folder to the include paths of the build system (Makefile, CMake etc)
+
 ## ESB Protocol
 The module esb_protocol implements a bidirectional binary communication protocl based on the Enhanced Shockburst Capabilities of the NRF52 SoCs.
 A ESB protocol message has the following format:

@@ -2,7 +2,7 @@
 #ifndef ESB_COMMANDS_H_
 #define ESB_COMMANDS_H_
 
-#include "esb_protocol.h"
+#include <common/protocol/esb_protocol.h>
 
 #define ESB_CMD_PAYLOAD_LEN_DYN 255  /* all payloads are allowed */
 

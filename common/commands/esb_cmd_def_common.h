@@ -2,7 +2,7 @@
 #ifndef ESB_CMD_DEF_COMMON_H_
 #define ESB_CMD_DEF_COMMON_H_
 
-#include "esb_commands.h"
+#include <common/commands/esb_commands.h>
 
 enum
 {

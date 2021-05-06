@@ -3,7 +3,7 @@
 #include "nrf_esb.h"
 #include "nrf_error.h"
 
-#include "esb.h"
+#include <common/driver/esb.h>
 
 #define ESB_CHECK_PIPE_PARAM(pipe)    do{if(pipe>=ESB_PIPE_NUM){return(ESB_ERR_PARAM);}}while(0)
 #define ESB_CHECK_NULL_PARAM(param)   do{if(param==NULL){return(ESB_ERR_PARAM);}}while(0)

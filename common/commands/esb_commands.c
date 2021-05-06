@@ -1,8 +1,8 @@
 #include <stddef.h>
 #include <string.h>
 
-#include "esb_commands.h"
-#include "esb_cmd_def_common.h"
+#include <common/commands/esb_commands.h>
+#include <common/commands/esb_cmd_def_common.h>
 
 #ifndef ESB_COMMANDS_NUM_APP_TABLES
 #define ESB_COMMANDS_NUM_APP_TABLES 3       /* max number of additional app specific command tables (default 3)*/
