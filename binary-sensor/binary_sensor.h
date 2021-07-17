@@ -34,7 +34,7 @@ typedef enum{
 
 /*!
  * \brief Initialize the "Binary Sensor" application layer
- * \param[in] peripheral_address    ESB pipeline address of this binar sensor device device
+ * \param[in] peripheral_address    ESB pipeline address of this binary sensor device
  * \retval ESB_PROT_ERR_OK          No Error
  * \retval ESB_PROT_ERR_PARAM       illegal parameter (NULL-pointer)
  * \retval ESB_PROT_ERR_MEM         No space to register ESb command table, check ::ESB_COMMANDS_NUM_APP_TABLES
@@ -42,7 +42,7 @@ typedef enum{
 esb_protocol_err_t binary_sensor_init(const uint8_t peripheral_address[5]);
 /*!
  * \brief Set the target address for the central device
- * \details All channel state change notifications will be sent to the cetral device. 
+ * \details All channel state change notifications will be sent to the central device. 
  * \param[in] central_address    ESB pipeline address of the listening central device
  * \retval ESB_PROT_ERR_OK       No Error
  * \retval ESB_PROT_ERR_PARAM    illegal parameter (NULL-pointer)
