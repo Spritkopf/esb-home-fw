@@ -22,12 +22,13 @@ typedef enum {
 
 /*! \brief error code sent in ESB replies */
 typedef enum {
-    ESB_PROT_REPLY_ERR_OK    = 0x00,  /* No Error */
-    ESB_PROT_REPLY_ERR_SIZE  = 0x01,  /* invalid payload length */
-    ESB_PROT_REPLY_ERR_CMD   = 0x02,  /* unknown command */
-    ESB_PROT_REPLY_ERR_API   = 0x03,  /* Call of an API function returned an Error */
-    ESB_PROT_REPLY_ERR_PARAM = 0x04,  /* Invalid Parameter */
-    ESB_PROT_REPLY_NONE      = 0xFF   /* special reply code. when set on a reply, the protocol layer will not send a reply for the current command*/
+    ESB_PROT_REPLY_ERR_OK            = 0x00,  /* No Error */
+    ESB_PROT_REPLY_ERR_SIZE          = 0x01,  /* invalid payload length */
+    ESB_PROT_REPLY_ERR_CMD           = 0x02,  /* unknown command */
+    ESB_PROT_REPLY_ERR_API           = 0x03,  /* Call of an API function returned an Error */
+    ESB_PROT_REPLY_ERR_PARAM         = 0x04,  /* Invalid Parameter */
+    ESB_PROT_REPLY_ERR_NOT_SUPPORTED = 0x05,  /* Function not supported */
+    ESB_PROT_REPLY_NONE              = 0xFF   /* special reply code. when set on a reply, the protocol layer will not send a reply for the current command*/
 } esb_protocol_msg_err_t;
 
 /*! \brief structure representing ESB messages */
