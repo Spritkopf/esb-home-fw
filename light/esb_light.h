@@ -14,12 +14,12 @@
 #include <common/protocol/esb_protocol.h>
 
 typedef enum {
-    RGB        = 0x01,    /*!< Device has a RGB light source, Supports setting RGB values */
-    RGBW       = 0x02,    /*!< Device has a RGBW light source, Supports setting RGBW values */
-    TEMP       = 0x04,    /*!< Device has a different White source (warm and cold), Supports setting color temperatures (Kelvin)*/
-    HSI        = 0x08,    /*!< Supports setting HSI values */
-    BRIGHTNESS = 0x10,    /*!< Device can dim the light source(s), support setting brightness value*/
-} light_capability_flags_t;
+    CAP_RGB        = 0x01,    /*!< Device has a RGB light source, Supports setting RGB values */
+    CAP_RGBW       = 0x02,    /*!< Device has a RGBW light source, Supports setting RGBW values */
+    CAP_TEMP       = 0x04,    /*!< Device has a different White source (warm and cold), Supports setting color temperatures (Kelvin)*/
+    CAP_HSI        = 0x08,    /*!< Supports setting HSI values */
+    CAP_BRIGHTNESS = 0x10,    /*!< Device can dim the light source(s), support setting brightness value*/
+} esb_light_capability_flags_t;
 
 typedef enum {
     ESB_LIGHT_PROP_STATE      = 0x00,  /*!< Describes if the device is ON or OFF, data: [state] */
@@ -33,6 +33,7 @@ typedef enum {
 
 } esb_light_property_id_t;
 
+/*
 typedef struct {
     uint8_t enabled;
     uint8_t brightness;
@@ -44,6 +45,43 @@ typedef struct {
     uint8_t h;
     uint8_t s;
     uint8_t i;
+} esb_light_property_t;
+*/
+typedef union props{
+
+    struct {
+        uint8_t len_enabled;
+        uint8_t enabled;
+    };
+    struct {
+        uint8_t len_brightness;
+        uint8_t brightness;
+    };
+    struct {
+        uint8_t len_rgb;
+        uint8_t r;
+        uint8_t g;
+        uint8_t b;
+    };
+    struct {
+        uint8_t len_rgbw;
+        uint8_t r;
+        uint8_t g;
+        uint8_t b;
+        uint8_t w;
+    };
+    struct {
+        uint8_t len_temp;
+        uint8_t color_temp;
+    };
+    struct {
+        uint8_t len_hsi;
+        uint8_t h;
+        uint8_t s;
+        uint8_t i;
+    };
+    uint8_t len;            /* first byte of the union is always the length of the property */
+    uint8_t data[4];        /* maximum size of the largest property */
 } esb_light_property_t;
 
 /*!
@@ -58,15 +96,15 @@ typedef esb_protocol_msg_err_t (*light_cmd_callback_t)(esb_light_property_id_t p
  * \brief Initialize the "ESB Light" application layer
  * \details Upon initialization the user application can specify which light properties actually are supported
  * by setting the capabilities flags accordingly. The capability value can be any combination of flags 
- * defined in ::light_capability_flags_t 
+ * defined in ::esb_light_capability_flags_t 
  * \param[in] peripheral_address    ESB pipeline address of this light device
- * \param[in] capabilities          Supported capabilities, see ::light_capability_flags_t
+ * \param[in] capabilities          Supported capabilities, see ::esb_light_capability_flags_t
  * \param[in] cmd_callback          Callback which is called when receiving ESB commands / requests, see ::light_cmd_callback_t
  * \retval ESB_PROT_ERR_OK          No Error
  * \retval ESB_PROT_ERR_PARAM       illegal parameter (NULL-pointer)
  * \retval ESB_PROT_ERR_MEM         No space to register ESb command table, check ::ESB_COMMANDS_NUM_APP_TABLES
  */
-esb_protocol_err_t esb_light_init(const uint8_t peripheral_address[5], light_capability_flags_t capabilities, light_cmd_callback_t cmd_callback);
+esb_protocol_err_t esb_light_init(const uint8_t peripheral_address[5], uint8_t capabilities, light_cmd_callback_t cmd_callback);
 
 /*!
  * \brief Set the target address for the central device
