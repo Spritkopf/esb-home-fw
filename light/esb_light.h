@@ -7,6 +7,18 @@
  * \details The "ESB Light" application offers commands to control a light source. It provides
  * interfaces for several different color options such as RGB, RGBW, HSI, (Warm-)White. The user application
  * is responsible for implementing these, otherwise they will be reported as "not supported".
+ * The user application can set and get properties via the api, as well as send a notification for a property.
+ * The ESB protocol message of the property notification has the following format:
+            |----HEADER----|------- PAYLOAD----------------|
+ * Bytes:   |  0   |   1   |     2:6     |    7    |   8 ...   |
+ * Value:   | CMD  | ERROR | PERIPH_ADDR | PROP_ID | DATA  ...   |
+ * 
+ * - CMD:         Command ID for the notification (always 0xAF)
+ * - ERROR:       Error byte, not used for notifications (always 0x00)
+ * - PERIPH_ADDR: ESB pipeline address of this ESB Light device
+ * - PROP_ID:     ID of the Property,  0 < PROP_ID < ESB_LIGHT_PROP_NUM
+ * - DATA:        Property data, Length depends on the size of the property, can range between 1 and 4, 
+ *                see description of ::esb_light_property_id_t
  * */
 
 
