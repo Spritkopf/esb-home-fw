@@ -2,6 +2,7 @@
 
 #include "esb_light.h"
 #include "esb_light_cmd_def.h"
+#include "esb_light_app_if.h"
 
 /* Turn light on or off
  * payload length: 1
@@ -14,12 +15,11 @@ void esb_light_cmd_fct_set_state(const esb_protocol_message_t* message, esb_prot
     answer->error = ESB_PROT_REPLY_ERR_OK;
     answer->payload_len = 0;
     
-    esb_light_property_t property = {
-        .enabled = message->payload[0]
-    };
-    esb_protocol_err_t result = esb_light_set_property(ESB_LIGHT_PROP_STATE, &property);
+    esb_protocol_err_t result = esb_light_set_property(ESB_LIGHT_PROP_STATE, message->payload, 1);
 
-    if(result != ESB_PROT_ERR_OK){
+    if(result == ESB_PROT_ERR_CMD){
+        answer->error = ESB_PROT_REPLY_ERR_NOT_SUPPORTED;
+    }else if(result != ESB_PROT_ERR_OK){
         answer->error = ESB_PROT_REPLY_ERR_API;
     }
     
@@ -40,12 +40,11 @@ void esb_light_cmd_fct_set_brightness(const esb_protocol_message_t* message, esb
     answer->error = ESB_PROT_REPLY_ERR_OK;
     answer->payload_len = 0;
     
-    esb_light_property_t property = {
-        .brightness = message->payload[0]
-    };
-    esb_protocol_err_t result = esb_light_set_property(ESB_LIGHT_PROP_BRIGHTNESS, &property);
+    esb_protocol_err_t result = esb_light_set_property(ESB_LIGHT_PROP_BRIGHTNESS, message->payload, 1);
 
-    if(result != ESB_PROT_ERR_OK){
+    if(result == ESB_PROT_ERR_CMD){
+        answer->error = ESB_PROT_REPLY_ERR_NOT_SUPPORTED;
+    }else if(result != ESB_PROT_ERR_OK){
         answer->error = ESB_PROT_REPLY_ERR_API;
     }
     
@@ -68,14 +67,11 @@ void esb_light_cmd_fct_set_rgb(const esb_protocol_message_t* message, esb_protoc
     answer->error = ESB_PROT_REPLY_ERR_OK;
     answer->payload_len = 0;
     
-    esb_light_property_t property = {
-        .r = message->payload[0],
-        .g = message->payload[1],
-        .b = message->payload[2],
-    };
-    esb_protocol_err_t result = esb_light_set_property(ESB_LIGHT_PROP_RGB, &property);
+    esb_protocol_err_t result = esb_light_set_property(ESB_LIGHT_PROP_RGB, message->payload, 3);
 
-    if(result != ESB_PROT_ERR_OK){
+    if(result == ESB_PROT_ERR_CMD){
+        answer->error = ESB_PROT_REPLY_ERR_NOT_SUPPORTED;
+    }else if(result != ESB_PROT_ERR_OK){
         answer->error = ESB_PROT_REPLY_ERR_API;
     }
     
@@ -99,15 +95,11 @@ void esb_light_cmd_fct_set_rgbw(const esb_protocol_message_t* message, esb_proto
     answer->error = ESB_PROT_REPLY_ERR_OK;
     answer->payload_len = 0;
     
-    esb_light_property_t property = {
-        .r = message->payload[0],
-        .g = message->payload[1],
-        .b = message->payload[2],
-        .w = message->payload[3],
-    };
-    esb_protocol_err_t result = esb_light_set_property(ESB_LIGHT_PROP_RGBW, &property);
+    esb_protocol_err_t result = esb_light_set_property(ESB_LIGHT_PROP_RGBW, message->payload, 4);
 
-    if(result != ESB_PROT_ERR_OK){
+    if(result == ESB_PROT_ERR_CMD){
+        answer->error = ESB_PROT_REPLY_ERR_NOT_SUPPORTED;
+    }else if(result != ESB_PROT_ERR_OK){
         answer->error = ESB_PROT_REPLY_ERR_API;
     }
     
@@ -130,14 +122,11 @@ void esb_light_cmd_fct_set_hsi(const esb_protocol_message_t* message, esb_protoc
     answer->error = ESB_PROT_REPLY_ERR_OK;
     answer->payload_len = 0;
     
-    esb_light_property_t property = {
-        .h = message->payload[0],
-        .s = message->payload[1],
-        .i = message->payload[2],
-    };
-    esb_protocol_err_t result = esb_light_set_property(ESB_LIGHT_PROP_HSI, &property);
+    esb_protocol_err_t result = esb_light_set_property(ESB_LIGHT_PROP_HSI, message->payload, 3);
 
-    if(result != ESB_PROT_ERR_OK){
+    if(result == ESB_PROT_ERR_CMD){
+        answer->error = ESB_PROT_REPLY_ERR_NOT_SUPPORTED;
+    }else if(result != ESB_PROT_ERR_OK){
         answer->error = ESB_PROT_REPLY_ERR_API;
     }
     
@@ -158,12 +147,11 @@ void esb_light_cmd_fct_set_temp(const esb_protocol_message_t* message, esb_proto
     answer->error = ESB_PROT_REPLY_ERR_OK;
     answer->payload_len = 0;
     
-    esb_light_property_t property = {
-        .color_temp = message->payload[0],
-    };
-    esb_protocol_err_t result = esb_light_set_property(ESB_LIGHT_PROP_TEMP, &property);
+    esb_protocol_err_t result = esb_light_set_property(ESB_LIGHT_PROP_TEMP, message->payload, 1);
 
-    if(result != ESB_PROT_ERR_OK){
+    if(result == ESB_PROT_ERR_CMD){
+        answer->error = ESB_PROT_REPLY_ERR_NOT_SUPPORTED;
+    }else if(result != ESB_PROT_ERR_OK){
         answer->error = ESB_PROT_REPLY_ERR_API;
     }
     

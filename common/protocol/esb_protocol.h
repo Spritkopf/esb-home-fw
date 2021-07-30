@@ -17,7 +17,8 @@ typedef enum {
     ESB_PROT_ERR_PARAM  = 0x05,         /* parameter error */
     ESB_PROT_ERR_INIT  = 0x06,          /* module not initialized */
     ESB_PROT_ERR_MEM  = 0x07,           /* Not enough memory for operation */
-    ESB_PROT_ERR_VALUE  = 0x08          /* Value error, unexpected value */
+    ESB_PROT_ERR_VALUE  = 0x08,         /* Value error, unexpected value */
+    ESB_PROT_ERR_SIZE  = 0x09           /* Invalid Size */
 } esb_protocol_err_t;
 
 /*! \brief error code sent in ESB replies */
