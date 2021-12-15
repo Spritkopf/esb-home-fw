@@ -81,7 +81,7 @@ esb_protocol_err_t esb_light_set_central_address(uint8_t central_address[5]);
  * \note This function is called from the command handler on incoming ESB commands.
  * It is not supposed to be called from the user application, because it calls the application defined function (see esb_light_app_if.h)
  */
-esb_protocol_err_t esb_light_set_property(esb_light_property_id_t prop_id, uint8_t* p_prop_data, uint8_t len);
+esb_protocol_err_t esb_light_set_property(esb_light_property_id_t prop_id, const uint8_t* p_prop_data, uint8_t len);
 
 /*!
  * \brief Get a property

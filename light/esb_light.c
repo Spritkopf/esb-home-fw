@@ -1,6 +1,7 @@
 #include <string.h>
 #include <stddef.h>
 #include "esb_light.h"
+#include "esb_light_app_if.h"
 #include "esb_light_cmd_def.h"
 
 #define ESB_LIGHT_NOTIFICATION_CMD_ID    0xAF
@@ -14,8 +15,6 @@ typedef struct {
 static uint8_t g_module_initialized = 0;
 static uint8_t g_peripheral_address[5] = {0};   /*!< ESB pipeline address of this ESB light device */
 static uint8_t g_central_address[5] = {0};      /*!< the central device which shall receive notifications */
-
-static uint8_t g_capabilities = 0;
 
 static uint8_t g_property_enabled = 0;
 static uint8_t g_property_brightness = 0;
@@ -74,7 +73,7 @@ esb_protocol_err_t esb_light_set_central_address(uint8_t central_address[5])
     return (ESB_PROT_ERR_OK);
 }
 
-esb_protocol_err_t esb_light_set_property(esb_light_property_id_t prop_id, uint8_t* p_prop_data, uint8_t len)
+esb_protocol_err_t esb_light_set_property(esb_light_property_id_t prop_id, const uint8_t* p_prop_data, uint8_t len)
 {
     if(prop_id > ESB_LIGHT_PROP_NUM){
         return (ESB_PROT_ERR_VALUE);
@@ -92,9 +91,9 @@ esb_protocol_err_t esb_light_set_property(esb_light_property_id_t prop_id, uint8
         return (ESB_PROT_ERR_SIZE);
     }
 
-    memcpy(p_prop_data, g_property_table[prop_id].p_data, len);
+    memcpy(g_property_table[prop_id].p_data, p_prop_data, len);
 
-    call_app_func(prop_id, p_prop_data);
+    call_app_func(prop_id, (uint8_t *)p_prop_data);
     
     return (ESB_PROT_ERR_OK);
 }
@@ -176,9 +175,6 @@ void call_app_func(esb_light_property_id_t prop_id, uint8_t* p_data)
     default:
         break;
     }
-
-    return (ESB_PROT_ERR_OK);
-
 }
 /* Weak definitions of the application specific functions. 
 They are meant to be overwritten by the user application */
