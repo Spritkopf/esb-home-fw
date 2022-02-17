@@ -7,6 +7,7 @@
 enum
 {
     ESB_CMD_VERSION     = 0x10,   /* Get firmware version */
+    ESB_CMD_BOND        = 0x11,   /* Bond with device, set address of connected central */
     ESB_CFG_SET_ITEM    = 0x21,   /* Set an configuration item */
     ESB_CFG_GET_ITEM    = 0x22,   /* Get an configuration item */
 } esb_cmd_id_common;

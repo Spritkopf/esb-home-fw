@@ -70,4 +70,26 @@ esb_protocol_err_t esb_protocol_transmit(const esb_protocol_message_t* message);
  */
 esb_protocol_err_t esb_protocol_process(void);
 
-#endif  // ESB_PROTOCOL_H_
+/*! \brief Save bonding information
+ *  \details Bonding information (central address) will be saved. The application firmware can
+             implement ::esb_protocol_bond_save to save the address persistently
+ *  \param  central_address         ESP Pipeline address to send notifications to
+ *  \retval ESB_PROT_ERR_OK          - OK
+ *  \retval ESB_PROT_ERR_INIT        - module not initialized
+ */
+esb_protocol_err_t esb_protocol_bond(const uint8_t central_address[5]);
+
+/*! \brief Delete bonding information
+ *  \retval ESB_PROT_ERR_OK          - OK
+ *  \retval ESB_PROT_ERR_INIT        - module not initialized
+ */
+
+esb_protocol_err_t esb_protocol_bond_delete(void);
+
+/*! \brief Save bonding information persistently.
+ *  \details This function must be implemented by the application firmware
+ */
+void esb_protocol_bond_save(const uint8_t central_address[5]);
+
+
+#endif  // ESB_PROTOCOL_H_Bs

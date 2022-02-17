@@ -17,6 +17,9 @@ NRF_QUEUE_DEF(esb_protocol_message_t, g_queue_rx, ESB_MESSAGE_QUEUE_SIZE, NRF_QU
 
 static uint8_t g_initialized = 0;
 
+static uint8_t g_bonded_central_address[5] = {0,0,0,0,0};
+
+
 static void esb_listener_callback(uint8_t *payload, uint8_t payload_length)
 {
     if(payload == NULL){
@@ -131,4 +134,25 @@ esb_protocol_err_t esb_protocol_process(void)
         esb_protocol_send(ESB_PIPE_SEND, &message);
     } 
     return (ESB_PROT_ERR_OK);
+}
+
+esb_protocol_err_t esb_protocol_bond(const uint8_t central_address[5])
+{
+    memcpy(g_bonded_central_address, central_address, sizeof(g_bonded_central_address));
+    esb_protocol_bond_save((const uint8_t*) g_bonded_central_address);
+    return (ESB_PROT_ERR_OK);
+}
+
+esb_protocol_err_t esb_protocol_bond_delete(void)
+{
+    memset(g_bonded_central_address, 0, sizeof(g_bonded_central_address));
+    esb_protocol_bond_save((const uint8_t*) g_bonded_central_address);
+    return (ESB_PROT_ERR_OK);
+}
+
+
+// Stub, must be implemented by application firmware
+__WEAK void esb_protocol_bond_save(const uint8_t central_address[5])
+{
+
 }
