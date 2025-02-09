@@ -4,12 +4,12 @@
 
 #include <common/commands/esb_commands.h>
 
-enum
+enum esb_cmd_id_common
 {
     ESB_CMD_VERSION     = 0x10,   /* Get firmware version */
     ESB_CFG_SET_ITEM    = 0x21,   /* Set an configuration item */
     ESB_CFG_GET_ITEM    = 0x22,   /* Get an configuration item */
-} esb_cmd_id_common;
+};
 
 
 /*! \brief get pointer to common command table */

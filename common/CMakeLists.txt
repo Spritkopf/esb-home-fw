@@ -12,10 +12,10 @@ target_sources(esb-home-fw PRIVATE
     commands/esb_cmd_def_common.c
 )
 
-target_include_directories(esb-home-fw PRIVATE
+target_include_directories(esb-home-fw PUBLIC
     ../
+    ${NRF5_SDK_PATH}/modules/nrfx
     ${NRF5_SDK_PATH}/modules/nrfx/mdk
-    ${NRF5_SDK_PATH}/components/toolchain/cmsis/include
     ${NRF5_SDK_PATH}/components/toolchain/cmsis/include
     ${NRF5_SDK_PATH}/components/proprietary_rf/esb
     ${NRF5_SDK_PATH}/components/libraries/util
@@ -28,3 +28,5 @@ target_include_directories(esb-home-fw PRIVATE
 
 
 target_compile_definitions(esb-home-fw PUBLIC NRF52840_XXAA)
+
+target_compile_options(esb-home-fw PRIVATE "-Wno-pointer-to-int-cast" "-Wno-int-to-pointer-cast")
