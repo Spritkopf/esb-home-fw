@@ -12,7 +12,7 @@ The project exposes the following CMake targets:
 
 ## ESB Protocol
 The module esb_protocol (common/protocol) implements a bidirectional binary communication protocol based on the Enhanced Shockburst Capabilities of the NRF52 SoCs.
-A ESB protocol message has the following format:
+An ESB protocol message has the following format:
 
 ```
             |----HEADER----|------- PAYLOAD----------------|
@@ -43,8 +43,6 @@ Pseudo code example on how to use the binary sensor module
 
     esb_protocol_init(esb_listener_address);
 
-    uint32_t num_app_cmds = 0;
-    
     binary_sensor_init(esb_listener_address);
     binary_sensor_set_central_address(g_app_config.esb_central_addr);
 
