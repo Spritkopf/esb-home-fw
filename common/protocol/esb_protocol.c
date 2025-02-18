@@ -9,6 +9,11 @@
 #define ESB_PIPE_SEND ESB_PIPE_0
 #define ESB_PIPE_LISTENING ESB_PIPE_1
 
+#define ESB_FRAME_IDX_CMD 0
+#define ESB_FRAME_IDX_ERR 1
+#define ESB_FRAME_IDX_PIPE 2
+#define ESB_FRAME_IDX_PAYLOAD ESB_PROTOCOL_HEADER_SIZE
+
 #define ESB_MESSAGE_QUEUE_SIZE 5 /* up to 5 messages can be stored before processing */
 
 /* define message queues in NO_OVERFLOW mode, throws error when full (don't overwrite old items)*/
@@ -16,29 +21,33 @@ NRF_QUEUE_DEF(esb_protocol_message_t, g_queue_tx, ESB_MESSAGE_QUEUE_SIZE, NRF_QU
 NRF_QUEUE_DEF(esb_protocol_message_t, g_queue_rx, ESB_MESSAGE_QUEUE_SIZE, NRF_QUEUE_MODE_NO_OVERFLOW);
 
 static uint8_t g_initialized = 0;
+static uint8_t g_pipeline_address[ESB_PIPE_ADDR_LENGTH] = {0};
 
 static void esb_listener_callback(uint8_t *payload, uint8_t payload_length)
 {
     if (payload == NULL) {
         return;
     }
-    // debug_swo_printf("received data: length: %d, cmd=%02X\n", payload_length, payload[0]);
-    esb_protocol_message_t rx_msg = {.cmd = payload[0], .error = 0x00, .payload_len = payload_length - 1};
+    esb_protocol_message_t rx_msg;
+    rx_msg.cmd = payload[ESB_FRAME_IDX_CMD];
+    rx_msg.error = payload[ESB_FRAME_IDX_ERR];
+    rx_msg.payload_len = payload_length - ESB_PROTOCOL_HEADER_SIZE;
 
-    if (payload_length > 1) {
-        memcpy(rx_msg.payload, &(payload[1]), rx_msg.payload_len);
+    if (rx_msg.payload_len > 0) {
+        memcpy(rx_msg.payload, &(payload[ESB_FRAME_IDX_PAYLOAD]), rx_msg.payload_len);
     }
     nrf_queue_push(&g_queue_rx, &rx_msg);
 }
 
 static void esb_protocol_send(const esb_pipeline_t pipeline, esb_protocol_message_t *message)
 {
-    uint8_t tx_buffer[32];
-    uint32_t tx_size = (uint32_t)message->payload_len + ESB_PROTOCOL_HEADER_SIZE;
+    uint8_t tx_buffer[ESB_FRAME_SIZE];
+    uint8_t tx_size = message->payload_len + ESB_PROTOCOL_HEADER_SIZE;
 
-    tx_buffer[0] = message->cmd;
-    tx_buffer[1] = message->error;
-    memcpy(&(tx_buffer[2]), message->payload, message->payload_len);
+    tx_buffer[ESB_FRAME_IDX_CMD] = message->cmd;
+    tx_buffer[ESB_FRAME_IDX_ERR] = message->error;
+    memcpy(&(tx_buffer[ESB_FRAME_IDX_PIPE]), g_pipeline_address, sizeof(g_pipeline_address));
+    memcpy(&(tx_buffer[ESB_FRAME_IDX_PAYLOAD]), message->payload, message->payload_len);
 
     /* set TX adress if not an answer */
     if (pipeline == ESB_PIPE_SEND) {
@@ -48,9 +57,9 @@ static void esb_protocol_send(const esb_pipeline_t pipeline, esb_protocol_messag
     esb_send_packet(pipeline, tx_buffer, tx_size);
 }
 
-esb_protocol_err_t esb_protocol_init(const uint8_t listening_address[5])
+esb_protocol_err_t esb_protocol_init(const uint8_t pipeline_address[5])
 {
-    if (listening_address == NULL) {
+    if (pipeline_address == NULL) {
         return (ESB_PROT_ERR_PARAM);
     }
 
@@ -59,7 +68,7 @@ esb_protocol_err_t esb_protocol_init(const uint8_t listening_address[5])
         return (ESB_PROT_ERR_HAL);
     }
 
-    result = esb_set_pipeline_address(ESB_PIPE_LISTENING, listening_address);
+    result = esb_set_pipeline_address(ESB_PIPE_LISTENING, pipeline_address);
     if (result != ESB_ERR_OK) {
         return (ESB_PROT_ERR_HAL);
     }
@@ -74,7 +83,9 @@ esb_protocol_err_t esb_protocol_init(const uint8_t listening_address[5])
 
     esb_commands_init();
 
+    memcpy(g_pipeline_address, pipeline_address, sizeof(g_pipeline_address));
     g_initialized = 1;
+
     return (ESB_PROT_ERR_OK);
 }
 
@@ -85,6 +96,10 @@ esb_protocol_err_t esb_protocol_transmit(const esb_protocol_message_t *message)
     }
 
     if (message == NULL) {
+        return (ESB_PROT_ERR_PARAM);
+    }
+
+    if (message->payload_len > ESB_PROTOCOL_MAX_PAYLOAD_LEN) {
         return (ESB_PROT_ERR_PARAM);
     }
 

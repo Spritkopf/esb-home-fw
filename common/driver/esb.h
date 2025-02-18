@@ -53,7 +53,7 @@ int8_t esb_stop_listening(const esb_pipeline_t pipeline);
 int8_t esb_set_rf_channel(const uint8_t channel);
 
 /* \brief Send data
- * \param pipeline          Pipeline number to listen on
+ * \param pipeline          Target Pipeline address
  * \param payload           Pointer to buffer for payload data
  * \param payload_length    Length of payload buffer
  * \retval ESB_ERR_OK       OK
@@ -63,6 +63,6 @@ int8_t esb_set_rf_channel(const uint8_t channel);
  * \retval ESB_ERR_PARAM    Parameter Error (NULL Pointer)
  * \retval ESB_ERR_TIMEOUT  ESB Timeout waiting for TX success
  */
-int8_t esb_send_packet(const esb_pipeline_t pipeline, const uint8_t *payload, uint32_t payload_length);
+int8_t esb_send_packet(const esb_pipeline_t pipeline, const uint8_t *payload, uint8_t payload_length);
 
 #endif

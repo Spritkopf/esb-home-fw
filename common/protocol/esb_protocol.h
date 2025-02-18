@@ -4,8 +4,18 @@
 #include <common/driver/esb.h>
 #include <stdint.h>
 
-#define ESB_PROTOCOL_HEADER_SIZE 2 /* command and error byte */
-#define ESB_PROTOCOL_MAX_PAYLOAD_LEN 32 - ESB_PROTOCOL_HEADER_SIZE
+/*
+ * ESB Message format (frame)
+ *          |---------HEADER-----------|---------PAYLOAD----------------|
+ * Bytes:   |  0   |   1   | 2 3 4 5 6 | 7          ...               31|
+ * Value:   | CMD  | ERROR |   PIPE    |          DATA                  |
+ *
+ */
+
+#define ESB_FRAME_SIZE 32
+#define ESB_PIPE_ADDR_LENGTH 5
+#define ESB_PROTOCOL_HEADER_SIZE (2 + ESB_PIPE_ADDR_LENGTH) /* command and error byte */
+#define ESB_PROTOCOL_MAX_PAYLOAD_LEN (ESB_FRAME_SIZE - ESB_PROTOCOL_HEADER_SIZE)
 
 /*! \brief Module error codes */
 typedef enum {
@@ -33,20 +43,21 @@ typedef enum {
 
 /*! \brief Structure representing ESB messages */
 typedef struct {
-    uint8_t address[5];                            /* Pipeline address on which the message shall be sent (tx-only) */
-    uint8_t cmd;                                   /* Command byte */
-    esb_protocol_msg_err_t error;                  /* Message error code, (tx-only)*/
+    uint8_t address[ESB_PIPE_ADDR_LENGTH]; /* Pipeline address to which the message shall be sent (tx) or from which the
+                                              message was received (rx)*/
+    uint8_t cmd;                           /* Command byte */
+    esb_protocol_msg_err_t error;          /* Message error code, (tx-only)*/
     uint8_t payload[ESB_PROTOCOL_MAX_PAYLOAD_LEN]; /* Payload buffer */
     uint8_t payload_len;                           /* Payload length */
 } esb_protocol_message_t;
 
 /*! \brief Initialize Enhanced Shockburst (ESB) communication protocol
- *  \param listening_address        ESP Pipeline address for listening (only 5-byte address supported)
+ *  \param pipeline_address        ESP Pipeline address for listening (only 5-byte address supported)
  *  \retval ESB_PROT_ERR_OK         - OK
  *  \retval ESB_PROT_ERR_HAL        - ESB HAL Error
  *  \retval ESB_PROT_ERR_PARAM      - Parameter Error (NULL Pointer)
  */
-esb_protocol_err_t esb_protocol_init(const uint8_t listening_address[5]);
+esb_protocol_err_t esb_protocol_init(const uint8_t pipeline_address[5]);
 
 /*! \brief Queue message for transmission
  *  \details Messages don't get sent right away, they will be put in the queue for outgoing

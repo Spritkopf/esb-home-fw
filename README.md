@@ -15,15 +15,16 @@ The module esb_protocol (common/protocol) implements a bidirectional binary comm
 An ESB protocol message has the following format:
 
 ```
-            |----HEADER----|------- PAYLOAD----------------|
- * Bytes:   |  0   |   1   |           N                   |
- * Value:   | CMD  | ERROR | 
+            |----HEADER----------------|---------PAYLOAD----------------|
+ * Bytes:   |  0   |   1   | 2 3 4 5 6 | 7          ...               31|
+ * Value:   | CMD  | ERROR |   PIPE    |          DATA                  |
  ```
  The same message format is used for commands and answers.
  The Header is mandatory for every message, payload is optional. 
 
  * `CMD` - Command byte. Each ESB command has a unique command identifier
  * `ERROR` - Error byte. Used for replies to signal execution results. Only relevant for replies, not evaluated for commands
+ * `PIPE` - Pipeline address of the source of the message. Used for direct replies, or identification at the central
  * `PAYLOAD` - Data payload. Maximum number of bytes is 30
 
 ## Applications

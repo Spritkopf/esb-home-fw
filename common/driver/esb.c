@@ -1,5 +1,4 @@
 #include <string.h>
-#include "nrf.h"
 #include "nrf_esb.h"
 #include "nrf_error.h"
 
@@ -162,7 +161,7 @@ int8_t esb_set_rf_channel(const uint8_t channel)
 }
 
 
-int8_t esb_send_packet(const esb_pipeline_t pipeline, const uint8_t *payload, uint32_t payload_length)
+int8_t esb_send_packet(const esb_pipeline_t pipeline, const uint8_t *payload, uint8_t payload_length)
 {
     ESB_CHECK_PIPE_PARAM(pipeline);
     ESB_CHECK_NULL_PARAM(payload);
